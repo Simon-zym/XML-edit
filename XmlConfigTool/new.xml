@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ZT_DOCTOR_CONSOLE>
+    <!-- 网络通信-net config -->
+    <NetConfig>
+        <DcServerIp>192.168.2.1</DcServerIp>
+        <DcClientIp>192.168.2.1</DcClientIp>
+        <DcServerPort>3000</DcServerPort>
+        <DcClientPort>3002</DcClientPort>
+        <LinearMotionSleep>30</LinearMotionSleep>
+        <ArmMotionSleep>30</ArmMotionSleep>
+        <LinearTimeOut>30</LinearTimeOut>
+    </NetConfig>
+    <!-- 脚踏开关-pedal config -->
+    <PedalConfig>
+        <PedalCom>COM2</PedalCom>
+        <PedalKey1>1</PedalKey1>
+        <PedalKey2>2</PedalKey2>
+        <PedalKey3>3</PedalKey3>
+        <PedalKey4>4</PedalKey4>
+        <PedalKey5>5</PedalKey5>
+        <PedalKey6>6</PedalKey6>
+        <PedalKey7>7</PedalKey7>
+        <PedalKey8>8</PedalKey8>
+    </PedalConfig>
+    <!-- 头盔检测-helmet config -->
+    <HelmetConfig>
+        <HelmetCom>COM12</HelmetCom>
+        <DistanceThresholdMM>50</DistanceThresholdMM>
+    </HelmetConfig>
+    <!-- 超声刀控制-Ultrasonic config -->
+    <UltrasonicConfig>
+        <UltrasonicCom>COM6</UltrasonicCom>
+        <UltrasonicMinKey>3</UltrasonicMinKey>
+        <UltrasonicMaxKey>4</UltrasonicMaxKey>
+    </UltrasonicConfig>
+    <!-- 电刀控制-Electricknife config -->
+    <HelmetConfig>
+        <ElectricknifeCom>COM6</ElectricknifeCom>
+        <ElectricknifeMinKey>5</ElectricknifeMinKey>
+        <ElectricknifeMaxKey>6</ElectricknifeMaxKey>
+    </HelmetConfig>
+    <!-- 医生主手-Omega config -->
+    <Omega0>
+        <!-- omega config -->
+        <OmegaName>Left Hand</OmegaName>
+        <OmegaId>11</OmegaId>
+        <ThreadIntervalMs>101</ThreadIntervalMs>
+        <OmegaCtrlArm1>1</OmegaCtrlArm1>
+        <OmegaCtrlArm2>0</OmegaCtrlArm2>
+        <OmegaCtrlArm3>0</OmegaCtrlArm3>
+        <OmegaCtrlArm4>0</OmegaCtrlArm4>
+        <OmegaCtrlTool1>1</OmegaCtrlTool1>
+        <OmegaCtrlTool2>0</OmegaCtrlTool2>
+        <OmegaCtrlTool3>0</OmegaCtrlTool3>
+        <OmegaCtrlTool4>0</OmegaCtrlTool4>
+        <OmegaPosXMin>-40</OmegaPosXMin>
+        <OmegaPosXMax>20</OmegaPosXMax>
+        <OmegaPosYMin>-90</OmegaPosYMin>
+        <OmegaPosYMax>90</OmegaPosYMax>
+        <OmegaPosZMin>-60</OmegaPosZMin>
+        <OmegaPosZMax>60</OmegaPosZMax>
+        <OmegaPosAMin>-60</OmegaPosAMin>
+        <OmegaPosAMax>60</OmegaPosAMax>
+        <OmegaPosBMin>-40</OmegaPosBMin>
+        <OmegaPosBMax>50</OmegaPosBMax>
+        <OmegaPosCMin>-60</OmegaPosCMin>
+        <OmegaPosCMax>25</OmegaPosCMax>
+        <OmegaPosGMin>-30</OmegaPosGMin>
+        <OmegaPosGMax>0</OmegaPosGMax>
+        <OmegaToolRefresh>0.02</OmegaToolRefresh>
+        <OmegaArmRefresh>0.2</OmegaArmRefresh>
+    </Omega0>
+    <Omega1>
+        <!-- omega config -->
+        <OmegaName>Right Hands</OmegaName>
+        <OmegaId>2</OmegaId>
+        <ThreadIntervalMs>10</ThreadIntervalMs>
+        <OmegaCtrlArm1>4</OmegaCtrlArm1>
+        <OmegaCtrlArm2>0</OmegaCtrlArm2>
+        <OmegaCtrlArm3>0</OmegaCtrlArm3>
+        <OmegaCtrlArm4>0</OmegaCtrlArm4>
+        <OmegaCtrlTool1>4</OmegaCtrlTool1>
+        <OmegaCtrlTool2>0</OmegaCtrlTool2>
+        <OmegaCtrlTool3>0</OmegaCtrlTool3>
+        <OmegaCtrlTool4>0</OmegaCtrlTool4>
+        <OmegaPosXMin>-40</OmegaPosXMin>
+        <OmegaPosXMax>20</OmegaPosXMax>
+        <OmegaPosYMin>-90</OmegaPosYMin>
+        <OmegaPosYMax>90</OmegaPosYMax>
+        <OmegaPosZMin>-60</OmegaPosZMin>
+        <OmegaPosZMax>60</OmegaPosZMax>
+        <OmegaPosAMin>-60</OmegaPosAMin>
+        <OmegaPosAMax>60</OmegaPosAMax>
+        <OmegaPosBMin>-40</OmegaPosBMin>
+        <OmegaPosBMax>50</OmegaPosBMax>
+        <OmegaPosCMin>-20</OmegaPosCMin>
+        <OmegaPosCMax>60</OmegaPosCMax>
+        <OmegaPosGMin>-30</OmegaPosGMin>
+        <OmegaPosGMax>0</OmegaPosGMax>
+        <OmegaToolRefresh>0.02</OmegaToolRefresh>
+        <OmegaArmRefresh>0.2</OmegaArmRefresh>
+    </Omega1>
+</ZT_DOCTOR_CONSOLE>
