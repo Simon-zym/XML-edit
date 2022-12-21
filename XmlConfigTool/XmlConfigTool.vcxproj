@@ -94,7 +94,7 @@
     <ClCompile Include="AddElemWidget.cpp" />
     <ClCompile Include="CharacterDataWatcher.cpp" />
     <ClCompile Include="MainWindow.cpp" />
-    <ClCompile Include="mian.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="XmlParser.cpp" />
   </ItemGroup>
   <ItemGroup>

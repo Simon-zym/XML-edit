@@ -1,14 +1,8 @@
 #pragma once
 #include <QDomDocument>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QIODevice>
-#include <QWidget>
-#include <QListWidget>
-#include <QStackedWidget>
-#include <QScrollArea>
-#include <QPushButton>
 #include <vector>
+#include <QtWidgets>
 
 /************************************************************************/
 /*xml 格式
@@ -66,6 +60,7 @@ private slots:
 	void slot_showComment(int );
 	void slot_reload();
 	void slot_addElem(QString, QString);
+	void slot_checkPage(QTreeWidgetItem *, int);
 protected:
 	QDomDocument doc;
 	std::vector<QDomNode> nodeVec;
@@ -74,7 +69,9 @@ protected:
 	QVBoxLayout *layout_edit;
 	QStackedWidget *stackedWidget = nullptr;
 	QListWidget *listWidget = nullptr;
+	QTreeWidget *treeWidget = nullptr;
 	QMap<int, QString> commentMap;
+	QMap<QTreeWidgetItem*, QWidget*> widgetMap;
 	QVBoxLayout *layout_rBottom;
 	QVBoxLayout *layout_operate;
 	QHBoxLayout *layout_btn;
@@ -83,6 +80,7 @@ protected:
 	QLabel *label_comment;
 	
 	bool addNode(QDomNode node, int dep);
+	bool addNode(QDomNode node, int dep, QStack<QTreeWidgetItem*> &);
 	void clear();
 	
 public:

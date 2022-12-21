@@ -274,3 +274,8 @@ void XmlParser::slot_addElem(QString name,QString val)
 		addNode(elem, 1);
 	}
 }
+
+void XmlParser::slot_checkPage(QTreeWidgetItem *, int) 
+{
+
+}
