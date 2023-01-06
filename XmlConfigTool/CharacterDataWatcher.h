@@ -9,11 +9,11 @@ class CharacterDataWatcher  : public QObject
 	Q_OBJECT
 
 public:
-	CharacterDataWatcher(QLineEdit *edit, const QDomElement &data);
+	CharacterDataWatcher(QWidget *edit, const QDomElement &data);
 	~CharacterDataWatcher();
 
 protected:
-	QLineEdit* lineEdit;
+	QWidget* widgetEdit;
 	QDomElement elem;
 
 private slots:

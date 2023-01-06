@@ -120,8 +120,8 @@ outline:none;
 }
 QDialog
 {
-    border: 1px solid lightgray;
-    border-radius:5px;
+border: 1px solid lightgray;
+border-radius:5px;
 }
 
 QStackedWidget QPushButton
@@ -137,8 +137,28 @@ height:35px;
 border:1px solid lightgray;
 border-left:none;
 }
+QComboBox{
+border-radius:0px;
+height:35px;
+border:1px solid lightgray;
+}
 
 QPushButton:pressed
 {
 background:rgb(0,0,0,50%);
 }
+
+QWidget#AddElemWidgetClass QWidget
+{
+min-width:145px;
+height:30px;
+font-size:14px;
+border:1px solid lightgray;
+}
+QComboBox QAbstractItemView::item{
+height:30px;
+color:#666666;
+padding-left:9px;
+background-color:#FFFFFF;
+}
+

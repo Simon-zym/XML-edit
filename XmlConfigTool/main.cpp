@@ -7,7 +7,7 @@
 
 int main(int argc, char* argv[]) 
 {
-	QFile file("test1.xml");
+	/*QFile file("test1.xml");
 	file.open(QIODevice::ReadOnly | QIODevice::Text);
 	QDomDocument doc;
 	doc.setContent(&file);
@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	hasch = t11.hasChildNodes();
 	QString nodeval = t11.toElement().text();
 	QString testgit = "git";
-	bool iselem = root.isElement();
+	bool iselem = root.isElement();*/
 	QApplication a(argc, argv);
 	QFile qssFile("m.qss");
 

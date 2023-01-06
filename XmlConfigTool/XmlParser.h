@@ -61,11 +61,12 @@ public:
 	explicit XmlParser(QWidget *parent=nullptr);
 	~XmlParser();
 	void parseXml();
-	void generateWidgets();
+	QLayout* generateWidgets(int type, QDomNode node);
 private slots:
 	void slot_showComment(int );
 	void slot_reload();
-	void slot_addElem(QString, QString);
+	void slot_addElem(int, const QMap<QString,QString>);
+	void slot_addCombo(QString, const QStringList);
 protected:
 	QDomDocument doc;
 	std::vector<QDomNode> nodeVec;
@@ -84,6 +85,7 @@ protected:
 	
 	bool addNode(QDomNode node, int dep);
 	void clear();
+	int getType(QDomNode);
 	
 public:
 	bool write(QIODevice *device)const;

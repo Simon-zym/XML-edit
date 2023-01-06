@@ -7,6 +7,14 @@
 #include "CharacterDataWatcher.h"
 #include "AddElemWidget.h"
 #include <QAction>
+#include <QSpinBox>
+#include "QDoubleSpinBox"
+#include <QCheckBox>
+#include <QComboBox>
+enum  EDITTYPE
+{
+	STR = 0,  NUM = 1, NUMD = 2, CHECK = 3, COMBOBOX = 4
+};
 XmlParser::XmlParser(QWidget *parent):QWidget(parent)
 {
 	hLayout = new QHBoxLayout(this);
@@ -53,7 +61,8 @@ XmlParser::XmlParser(QWidget *parent):QWidget(parent)
 			if (!doc.isNull())
 			{
 				AddElemWidget elemDlg;
-				connect(&elemDlg, &AddElemWidget::sig_addElem, this, &XmlParser::slot_addElem);
+				connect(&elemDlg, &AddElemWidget::sig_addElem2, this, &XmlParser::slot_addElem);
+				connect(&elemDlg, &AddElemWidget::sig_addQCombo, this, &XmlParser::slot_addCombo);
 				elemDlg.exec();
 			}	
 		});
@@ -99,8 +108,127 @@ XmlEdit::XmlEdit(QWidget*parent):QScrollArea(parent)
 }
 XmlEdit::~XmlEdit() {}
 
+#include <QDebug>
+QLayout* XmlParser::generateWidgets(int type,QDomNode node) 
+{
+	QHBoxLayout *layout = new QHBoxLayout();
+	QLabel *label = new QLabel((static_cast<XmlEdit*>(stackedWidget->currentWidget()))->widget());
+	label->setText(node.nodeName());
+	layout->addWidget(label);
+	
+	
+	switch (type)
+	{
+	case STR:
+	{
+		QLineEdit *edit = new QLineEdit((static_cast<XmlEdit*>(stackedWidget->currentWidget()))->widget());
+		edit->setText(node.toElement().text());
+		new CharacterDataWatcher(edit, node.toElement());
+		layout->addWidget(edit);
+		break;
+	}
+	case NUM:
+	{
+		QSpinBox *spinBox = new QSpinBox((static_cast<XmlEdit*>(stackedWidget->currentWidget()))->widget());
+		
+		
+		new CharacterDataWatcher(spinBox, node.toElement());
+		QDomNamedNodeMap ma = node.attributes();
+		if (ma.namedItem("max").isNull())
+		{
+			
+			spinBox->setMaximum(INTMAX_MAX);
+			
+		}
+		else 
+		{
+			spinBox->setMaximum(ma.namedItem("max").toAttr().value().toInt());
+		}
 
-void XmlParser::generateWidgets() {}
+		if (ma.namedItem("min").isNull())
+		{
+			spinBox->setMinimum(INT_MIN);
+			
+		} 
+		else
+		{
+			spinBox->setMinimum(ma.namedItem("min").toAttr().value().toInt());
+		}
+		spinBox->setValue(node.toElement().text().toInt());
+		layout->addWidget(spinBox);
+		break;
+	}
+	case NUMD:
+	{
+		QDoubleSpinBox *dSpinBox = new QDoubleSpinBox((static_cast<XmlEdit*>(stackedWidget->currentWidget()))->widget());
+		
+		new CharacterDataWatcher(dSpinBox, node.toElement());
+		QDomNamedNodeMap ma = node.attributes();
+		if (ma.namedItem("max").isNull())
+		{
+			dSpinBox->setMaximum(INT_MAX);
+		}
+		else
+		{
+			dSpinBox->setMaximum(ma.namedItem("max").toAttr().value().toDouble());
+			
+		}
+
+		if (ma.namedItem("min").isNull())
+		{
+			dSpinBox->setMinimum(INT_MIN);
+		}
+		else
+		{
+			dSpinBox->setMinimum(ma.namedItem("min").toAttr().value().toDouble());
+			
+		}
+		dSpinBox->setValue(node.toElement().text().toDouble());
+		dSpinBox->setSingleStep(0.01);
+		layout->addWidget(dSpinBox);
+		break;
+	}
+	case CHECK:
+	{
+		QCheckBox *checkBox = new QCheckBox((static_cast<XmlEdit*>(stackedWidget->currentWidget()))->widget());
+		checkBox->setChecked(node.toElement().text().toInt());
+		new CharacterDataWatcher(checkBox, node.toElement());
+		layout->addWidget(checkBox);
+		break;
+	}
+	case COMBOBOX:
+	{
+		QComboBox *comboBox = new QComboBox((static_cast<XmlEdit*>(stackedWidget->currentWidget()))->widget());
+		QStringList strs;
+		QDomNode n = node.firstChild();
+		while (!n.isNull())
+		{
+			comboBox->addItem(n.toElement().text());
+			
+			n = n.nextSibling();
+			
+		}
+		
+		QDomNamedNodeMap ma = node.attributes();
+		QDomNode cur = ma.namedItem("value");
+
+		//qDebug() << strs.value(0).toStdU16String();
+		
+		comboBox->setCurrentIndex(cur.toAttr().value().toInt());
+		new CharacterDataWatcher(comboBox, node.toElement());
+		layout->addWidget(comboBox);
+		break;
+	}
+	default:
+		break;
+	}
+	QPushButton *btn_send = new QPushButton((static_cast<XmlEdit*>(stackedWidget->currentWidget()))->widget());
+	btn_send->setText(tr("send"));
+	
+	
+	layout->addWidget(btn_send);
+	return layout;
+}
 
 void XmlParser::parseXml() 
 {
@@ -151,23 +279,15 @@ bool XmlParser::addNode(QDomNode node, int dep)
 		listWidget->setCurrentRow(listWidget->count()-1);
 	}else if (dep == 1)
 	{
-		QHBoxLayout *layout = new QHBoxLayout();
-		QLabel *label = new QLabel((static_cast<XmlEdit*>(stackedWidget->currentWidget()))->widget());
-		label->setText(node.nodeName());
-		QLineEdit *edit = new QLineEdit((static_cast<XmlEdit*>(stackedWidget->currentWidget()))->widget());
-		edit->setText(node.toElement().text());
-		QPushButton *btn_send = new QPushButton((static_cast<XmlEdit*>(stackedWidget->currentWidget()))->widget());
-		btn_send->setText(tr("send"));
-		layout->addWidget(label);
-		layout->addWidget(edit);
-		layout->addWidget(btn_send);
+		int type = getType(node);
+		QLayout *layout =generateWidgets(type, node);
 		QVBoxLayout *lay = (static_cast<XmlEdit*>(stackedWidget->currentWidget()))->layoutTop;
 		lay->addLayout(layout);	
-		new CharacterDataWatcher(edit, node.toElement());
+		/*new CharacterDataWatcher(edit, node.toElement());
 		connect(btn_send, &QPushButton::clicked, this, [=]()
 			{
 				emit sig_send(label->text(),edit->text());
-			});
+			});*/
 	}
 	return true;
 }
@@ -191,7 +311,7 @@ bool XmlParser::read(QIODevice *device)
 		QMessageBox::information(window(), tr("XML parser"), tr("parse error at line %1,column %2:\n%3").arg(errLine).arg(errCol).arg(errStr));
 		return false;
 	}
-	fileName = static_cast<QFile*>(device)->fileName();
+	fileName = dynamic_cast<QFile*>(device)->fileName();
 	QDomElement elem = doc.documentElement();
 	QStack<QDomNode> stack;
 	QDomNode current = elem.firstChild();
@@ -261,16 +381,118 @@ void XmlParser::clear()
 
 void XmlParser::slot_reload() {}
 #include <QDebug>
-void XmlParser::slot_addElem(QString name,QString val) 
+void XmlParser::slot_addElem(int type,QMap<QString,QString> data) 
 {
-	qDebug() << "add elem: " << name << "  v:" <<val << endl;
+	QDomNode node = nodeVec[listWidget->currentRow()];
+	if (!node.isNull())
+	{
+		QString nodeName = data["name"];
+		QDomElement elem = doc.createElement(nodeName);
+		QDomText text = doc.createTextNode(data["value"]);
+		elem.appendChild(text);
+		
+		
+		switch (type)
+		{
+		case STR:
+		{
+			elem.setAttribute("type","STR");
+			break;
+		}
+		case NUM:
+		{
+			elem.setAttribute("type","NUM");
+			if (data.contains("min"))
+			{
+				elem.setAttribute("min", data.value("min"));
+			}
+			if (data.contains("max"))
+			{
+				elem.setAttribute("max", data.value("max"));
+			}
+			break;
+		}
+		case NUMD:
+		{
+			elem.setAttribute("type", "NUMD");
+			if (data.contains("min"))
+			{
+				elem.setAttribute("min", data.value("min"));
+			}
+			if (data.contains("max"))
+			{
+				elem.setAttribute("max", data.value("max"));
+			}
+			break;
+		}
+		case CHECK:
+		{
+			elem.setAttribute("type", "CHECK");
+			break;
+		}
+		}
+		node.appendChild(elem);
+		addNode(elem, 1);
+	}
+}
+
+void XmlParser::slot_addCombo(QString name,const QStringList list)
+{
 	QDomNode node = nodeVec[listWidget->currentRow()];
 	if (!node.isNull())
 	{
 		QDomElement elem = doc.createElement(name);
-		QDomText text = doc.createTextNode(val);
-		elem.appendChild(text);
+		elem.setAttribute("type", "COMBOBOX");
+		elem.setAttribute("value", "0");
+		for (auto str : list)
+		{
+			QDomNode n = doc.createElement(str);
+			QDomText text = doc.createTextNode(str);
+			n.appendChild(text);
+			elem.appendChild(n);
+		}
 		node.appendChild(elem);
 		addNode(elem, 1);
+	}
+}
+
+int XmlParser::getType(QDomNode node) 
+{
+	if (node.isNull())
+	{
+		return -1;
+	}
+	else if (!node.hasAttributes()) 
+	{
+		return STR;
+	}
+	else 
+	{
+		QDomNamedNodeMap attrMap =node.attributes();
+		QString typeName = attrMap.namedItem("type").toAttr().value();
+
+		if (typeName == "str")
+		{
+			return STR;
+		}
+		else if (typeName == "CHECK") 
+		{
+			return CHECK;
+		}
+		else if (typeName == "NUM") 
+		{
+			return NUM;
+		}
+		else if (typeName == "NUMD") 
+		{
+			return NUMD;
+		}
+		else if(typeName == "COMBOBOX"){
+			return COMBOBOX;
+		}
+		else 
+		{
+			return STR;
+		}
 	}
 }
